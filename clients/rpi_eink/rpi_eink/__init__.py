@@ -15,8 +15,8 @@ from .waveshare_epd import epd4in0e
 
 _LOGGER = logging.getLogger(__name__)
 
-WIDTH = 400
-HEIGHT = 600
+WIDTH = 600
+HEIGHT = 400
 FLAG_FILE = "/tmp/gallery-client-rpi-eink"  # noqa: S108
 
 
@@ -49,6 +49,8 @@ def refresh_client(
         )
 
     w, h = image.size
+    if h > w:
+        image = image.rotate(90, expand=True)
     if h != HEIGHT:
         raise ValueError(f"The image height '{h}' must be '{HEIGHT}'")
     if w != WIDTH:
