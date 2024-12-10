@@ -5,6 +5,7 @@ import hashlib
 from io import BytesIO
 import logging
 import os
+from pathlib import Path
 import time
 
 from gpiozero import OutputDevice
@@ -18,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 WIDTH = 600
 HEIGHT = 400
 ROTATION = -90
-FLAG_FILE = "/tmp/gallery-client-rpi-eink"  # noqa: S108
+FLAG_FILE = "/var/gallery-client/gallery-client-rpi-eink"
 
 
 def refresh_client(
@@ -58,6 +59,7 @@ def refresh_client(
         raise ValueError(f"The image width '{w}' must be '{WIDTH}'")
 
     image_hash = hashlib.sha256(image.tobytes()).hexdigest()
+    Path(FLAG_FILE).mkdir(parents=True, exist_ok=True)
     if os.path.exists(FLAG_FILE):
         with open(FLAG_FILE) as f:
             saved_hash = f.read().strip()
