@@ -59,7 +59,7 @@ def refresh_client(
         raise ValueError(f"The image width '{w}' must be '{WIDTH}'")
 
     image_hash = hashlib.sha256(image.tobytes()).hexdigest()
-    Path(FLAG_FILE).mkdir(parents=True, exist_ok=True)
+    Path(os.path.dirname(FLAG_FILE)).mkdir(parents=True, exist_ok=True)
     if os.path.exists(FLAG_FILE):
         with open(FLAG_FILE) as f:
             saved_hash = f.read().strip()
