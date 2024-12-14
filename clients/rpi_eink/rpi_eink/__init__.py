@@ -35,15 +35,27 @@ def refresh_client(
         )
 
     image: Image.Image | None = None
-    if path:
-        _LOGGER.info("Loading image from path: %s", path)
-        image = load_image_from_path(path)
-    elif url:
-        _LOGGER.info("Loading image from url: %s", url)
-        image = load_image_from_url(url, url_headers)
+    try:
+        if path:
+            _LOGGER.info("Loading image from path: %s", path)
+            image = load_image_from_path(path)
+        elif url:
+            _LOGGER.info("Loading image from url: %s", url)
+            image = load_image_from_url(url, url_headers)
+
+    except ReferenceError:
+        _LOGGER.info(
+            "Due to ReferenceError caught, we just shutdown and try again later."
+        )
+        if done_pin:
+            enable_done_pin(done_pin)
+        return
 
     if not image:
-        raise ReferenceError("'image' is None")
+        _LOGGER.exception("'image' is None, which should not happen, aborting...")
+        if done_pin:
+            enable_done_pin(done_pin)
+        return
 
     if image.format != "BMP":
         raise ValueError(
@@ -111,11 +123,19 @@ def load_image_from_url(url: str, headers: list[str] = []) -> Image.Image:
     response = requests.get(url, headers=headers_dict)
     try:
         response.raise_for_status()  # Raise an error for bad HTTP responses
+    except requests.ConnectionError as e:
+        _LOGGER.warning("No internet connection or URL is unreachable: %s", url)
+        raise ReferenceError(
+            f"Unable to connect to {url}. Check your internet connection."
+        ) from e
     except requests.HTTPError as e:
-        _LOGGER.warning(e)
+        _LOGGER.warning("HTTP error occurred: %s", str(e))
         raise ReferenceError(
             f"Could not load image from url at: {url} with headers: {headers}"
         ) from e
+    except requests.Timeout as e:
+        _LOGGER.warning("Request timed out for URL: %s", url)
+        raise ReferenceError(f"Timed out while trying to fetch {url}.") from e
 
     # Read the image content into a BytesIO object
     image_data = BytesIO(response.content)
