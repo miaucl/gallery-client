@@ -158,7 +158,7 @@ def enable_done_pin(pin: int) -> None:
     _LOGGER.info("Enable done %d", pin)
     done_pin.on()
     # If using hard-shutdown, the script should stop here as the host loses power
-    _LOGGER.info("Done pin %s enabled, waiting for power loss", pin)
+    _LOGGER.info("Done pin %s enabled, waiting 30s for power loss", pin)
 
     # Let the outside logic handle it, then return
-    time.sleep(1)
+    time.sleep(30)

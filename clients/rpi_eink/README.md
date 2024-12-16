@@ -17,6 +17,7 @@ Displays
 Watchdog Timer
 
 - [Adafruit TPL5110 Low Power Timer Breakout](https://www.adafruit.com/product/3435) using an external resistor of [180kOhm](https://learn.adafruit.com/adafruit-tpl5110-power-timer-breakout/usage)
+- (Optional) Delay circuit if your pins are floating at the beginning or even switch to high for a certain amount of time (see example). If not needed, remove C1 and R2 and set R3=0Ohm.
 
 Power
 
@@ -24,20 +25,23 @@ Power
 
 ## Wiring
 
-```txt
-GND --> Timer GND
-5V --> Timer 5V
-GND --> 180kOhm --> Timer Delay
-GND --> RPi GND
-Timer Driver --> RPi 5V
-RPi GPIO [9..27] --> Timer Done
-```
+![Circuit](./circuit.png)
 
 ## Limitations
+
+### Possible delay values
 
 Currently, the slowest the timer can go is every 2h, therefore an additional logic is implemented to quickly check and shutdown based on a high level updated frequency defined on python level.
 
 You have to use one of the GPIOs from [9..27] for the Done pin, as they are the only one per default pulled to GND.
+
+### GPIOs state unknown (example RPi)
+
+We need to use a high enough capacity C1 to bridge the RPi GPIO switching to HIGH for about 1s, but still have a low enough R3 to be able to trigger the Done pin.
+
+Using the delay circuit, we assume that: The capacitor is considered "fully charged" after about 5 time constants (5τ), where τ=RC.
+
+We observe, that with values C1=470uF and R1=10kOhm, we survive the startup and take about 4s to trigger the Done pin.
 
 ## Configuration
 
@@ -49,7 +53,7 @@ Example .env file:
 PIC_PATH=/path/to/pic.bmp
 PIC_URL=http://pic.url/img.bmp
 PIC_URL_HEADER=AUTHORIZATION: BEARER QWER
-DONE_PIN=27
+DONE_PIN=12
 ```
 
 ## Misc
