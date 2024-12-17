@@ -41,7 +41,7 @@ We need to use a high enough capacity C1 to bridge the RPi GPIO switching to HIG
 
 Using the delay circuit, we assume that: The capacitor is considered "fully charged" after about 5 time constants (5τ), where τ=RC.
 
-We observe, that with values C1=470uF and R1=10kOhm, we survive the startup and take about 4s to trigger the Done pin.
+We observe, that with values C1=470uF and R1=22kOhm, we survive the startup and take about 5-8s to trigger the Done pin.
 
 ## Configuration
 
