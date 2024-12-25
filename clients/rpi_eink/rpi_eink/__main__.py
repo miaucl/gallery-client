@@ -24,7 +24,7 @@ def load_env_vars() -> dict[str, str]:
     load_dotenv()
 
     env_vars = {}
-    for var in ["PIC_PATH", "PIC_URL", "PIC_URL_HEADER", "DONE_PIN"]:
+    for var in ["MODEL", "PIC_PATH", "PIC_URL", "PIC_URL_HEADER", "DONE_PIN"]:
         value = os.getenv(var)
         env_vars[var] = value
 
@@ -41,6 +41,7 @@ if __name__ == "__main__":
     env_vars = load_env_vars()
 
     refresh_client(
+        env_vars["MODEL"],
         env_vars.get("PIC_PATH"),
         env_vars.get("PIC_URL"),
         [env_vars["PIC_URL_HEADER"]] if env_vars.get("PIC_URL_HEADER") else [],

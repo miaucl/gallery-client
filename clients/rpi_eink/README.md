@@ -12,7 +12,7 @@ Raspberry PIs
 Displays
 
 - [4inch_e-Paper_HAT+](https://www.waveshare.com/wiki/4inch_e-Paper_HAT%2B_(E)_Manual#Python)
-- [7.3inch_e-Paper_HAT](https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(E)_Manual#Python) (coming soon)
+- [7.3inch_e-Paper_HAT](https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(E)_Manual#Python)
 
 Watchdog Timer
 
@@ -50,6 +50,7 @@ Use the package either directly as package from your script or with env variable
 Example .env file:
 
 ```txt
+MODEL=rpi_eink_4in0e|rpi_eink_7in3e
 PIC_PATH=/path/to/pic.bmp
 PIC_URL=http://pic.url/img.bmp
 PIC_URL_HEADER=AUTHORIZATION: BEARER QWER
@@ -60,6 +61,6 @@ DONE_PIN=12
 
 Use `last reboot` to see last boots and verify correct timer behaviour.
 
-There is a demo script `scripts/epd_4in0e_test.py` to show the possibilities and verify the setup.
+There are demo scripts `scripts/epd_{4in0e|7in3e}_test.py` to show the possibilities and verify the setup.
 
-There is another script `scripts/simple_pic.test.py` to show a simple bmp image and the the verify that the image is usable.
+There is another script `scripts/simple_pic_{4in0e|7in3e}.py` to show a simple bmp image and the the verify that the image is usable.

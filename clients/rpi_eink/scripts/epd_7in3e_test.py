@@ -17,14 +17,15 @@ basedir = os.path.join(
 if os.path.exists(basedir):
     sys.path.append(basedir)
 
-from waveshare_epd import epd4in0e  # type: ignore # noqa: E402
+from waveshare_epd import epd7in3e  # type: ignore # noqa: E402
 
 logging.basicConfig(level=logging.DEBUG)
 
-try:
-    logging.info("epd4in0e Demo")
 
-    epd = epd4in0e.EPD()
+try:
+    logging.info("epd7in3e Demo")
+
+    epd = epd7in3e.EPD()
     logging.info("init and Clear")
     epd.init()
     epd.Clear()
@@ -39,7 +40,7 @@ try:
     )  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
     draw.text((5, 0), "hello world", font=font18, fill=epd.RED)
-    draw.text((5, 20), "4inch e-Paper (e)", font=font24, fill=epd.YELLOW)
+    draw.text((5, 20), "7.3inch e-Paper (e)", font=font24, fill=epd.YELLOW)
     draw.text((5, 45), "微雪电子", font=font40, fill=epd.GREEN)
     draw.text((5, 85), "微雪电子", font=font40, fill=epd.BLUE)
     draw.text((5, 125), "微雪电子", font=font40, fill=epd.BLACK)
@@ -55,7 +56,7 @@ try:
 
     # read bmp file
     logging.info("2.read bmp file")
-    Himage = Image.open(os.path.join(picdir, "4in0e", "01.bmp"))
+    Himage = Image.open(os.path.join(picdir, "7in3e", "01.bmp"))
     epd.display(epd.getbuffer(Himage))
     time.sleep(3)
 
@@ -70,5 +71,5 @@ except OSError as e:
 
 except KeyboardInterrupt:
     logging.info("ctrl + c:")
-    epd4in0e.epdconfig.module_exit(cleanup=True)  # type: ignore
+    epd7in3e.epdconfig.module_exit(cleanup=True)  # type: ignore
     sys.exit()

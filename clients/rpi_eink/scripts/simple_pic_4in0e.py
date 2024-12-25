@@ -1,4 +1,4 @@
-"""Simple pic test."""
+"""Simple pic test for 4in0e."""
 
 #!/usr/bin/python
 import logging

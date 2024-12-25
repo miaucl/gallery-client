@@ -1,6 +1,7 @@
 """Init module."""
 
 #!/usr/bin/python
+from dataclasses import dataclass
 import hashlib
 from io import BytesIO
 import logging
@@ -12,17 +13,36 @@ from gpiozero import OutputDevice
 from PIL import Image
 import requests
 
-from .waveshare_epd import epd4in0e
+from .waveshare_epd import epd4in0e, epd7in3e
 
 _LOGGER = logging.getLogger(__name__)
 
-WIDTH = 600
-HEIGHT = 400
-ROTATION = -90
+
+@dataclass
+class epd4in0e_consts:
+    """Constants for the 4.0 inch e-Paper."""
+
+    model: str = "rpi_eink_4in0e"
+    height: int = 400
+    width: int = 600
+    rotation: int = -90
+
+
+@dataclass
+class epd7in3e_consts:
+    """Constants for the 7.3 inch e-Paper."""
+
+    model: str = "rpi_eink_7in3e"
+    height: int = 800
+    width: int = 480
+    rotation: int = -90
+
+
 FLAG_FILE = "/var/gallery-client/gallery-client-rpi-eink"
 
 
 def refresh_client(
+    model: str,
     path: str | None = None,
     url: str | None = None,
     url_headers: list[str] = [],
@@ -33,6 +53,16 @@ def refresh_client(
         raise ReferenceError(
             "At least one of 'path' or 'url' must be set to refresh the client."
         )
+
+    if model == epd4in0e_consts.model:
+        epd = epd4in0e
+        consts = epd4in0e_consts
+    elif model == epd7in3e_consts.model:
+        epd = epd7in3e
+        consts = epd7in3e_consts
+    else:
+        raise ValueError(f"Invalid model: {model}")
+    _LOGGER.info("Load model: %s", model)
 
     image: Image.Image | None = None
     try:
@@ -64,11 +94,11 @@ def refresh_client(
 
     w, h = image.size
     if h > w:
-        image = image.rotate(ROTATION, expand=True)
-    if h != HEIGHT:
-        raise ValueError(f"The image height '{h}' must be '{HEIGHT}'")
-    if w != WIDTH:
-        raise ValueError(f"The image width '{w}' must be '{WIDTH}'")
+        image = image.rotate(consts.rotation, expand=True)
+    if h != consts.height:
+        raise ValueError(f"The image height '{h}' must be '{consts.height}'")
+    if w != consts.width:
+        raise ValueError(f"The image width '{w}' must be '{consts.width}'")
 
     image_hash = hashlib.sha256(image.tobytes()).hexdigest()
     Path(os.path.dirname(FLAG_FILE)).mkdir(parents=True, exist_ok=True)
@@ -86,7 +116,7 @@ def refresh_client(
         f.write(image_hash)
     _LOGGER.info("New hash written to %s: %s", FLAG_FILE, image_hash)
 
-    epd = epd4in0e.EPD()
+    epd = epd.EPD()
     _LOGGER.info("Init and clear screen")
     epd.init()
     epd.Clear()
