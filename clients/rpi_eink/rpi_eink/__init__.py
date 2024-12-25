@@ -33,8 +33,8 @@ class epd7in3e_consts:
     """Constants for the 7.3 inch e-Paper."""
 
     model: str = "rpi_eink_7in3e"
-    height: int = 800
-    width: int = 480
+    height: int = 480
+    width: int = 800
     rotation: int = -90
 
 
