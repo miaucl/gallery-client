@@ -17,31 +17,15 @@ Displays
 Watchdog Timer
 
 - [Adafruit TPL5110 Low Power Timer Breakout](https://www.adafruit.com/product/3435) using an external resistor of [180kOhm](https://learn.adafruit.com/adafruit-tpl5110-power-timer-breakout/usage)
-- (Optional) Delay circuit if your pins are floating at the beginning or even switch to high for a certain amount of time (see example). If not needed, remove C1 and R2 and set R3=0Ohm.
+- [74HC74 D-FlipFlop](https://www.ti.com/lit/ds/symlink/sn74hc74-ep.pdf?ts=1735254685546&ref_url=https%253A%252F%252Fwww.google.com%252F) with some further components such as a `100kOhm` and a `10kOhm` resistor, and a `100nF` capacitor.
 
 Power
 
-[(Optionally) USB-C Breakout Board](https://www.adafruit.com/product/4090)
+[USB-C Breakout Board](https://www.adafruit.com/product/4090)
 
-## Wiring
+## RC Time
 
-![Circuit](./circuit.png)
-
-## Limitations
-
-### Possible delay values
-
-Currently, the slowest the timer can go is every 2h, therefore an additional logic is implemented to quickly check and shutdown based on a high level updated frequency defined on python level.
-
-You have to use one of the GPIOs from [9..27] for the Done pin, as they are the only one per default pulled to GND.
-
-### GPIOs state unknown (example RPi)
-
-We need to use a high enough capacity C1 to bridge the RPi GPIO switching to HIGH for about 1s, but still have a low enough R3 to be able to trigger the Done pin.
-
-Using the delay circuit, we assume that: The capacitor is considered "fully charged" after about 5 time constants (5τ), where τ=RC.
-
-We observe, that with values C1=470uF and R1=22kOhm, we survive the startup and take about 5-8s to trigger the Done pin.
+Use following page to calculate your POR circuit (recommended >10ms): <https://www.digikey.com/en/resources/conversion-calculators/conversion-calculator-time-constant>
 
 ## Configuration
 
