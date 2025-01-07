@@ -21,7 +21,8 @@ Watchdog Timer
 
 Power
 
-[USB-C Breakout Board](https://www.adafruit.com/product/4090)
+- [USB-C Breakout Board](https://www.adafruit.com/product/4090)
+- Depending on the your power source, you are well-advised to add a large capacitor (tested with 470uF, but really depends on your setup) to prevent dips in the tension
 
 ## RC Time
 
