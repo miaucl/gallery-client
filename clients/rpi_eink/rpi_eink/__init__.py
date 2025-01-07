@@ -112,10 +112,6 @@ def refresh_client(
                 enable_done_pin(done_pin)
             return
 
-    with open(FLAG_FILE, "w") as f:
-        f.write(image_hash)
-    _LOGGER.info("New hash written to %s: %s", FLAG_FILE, image_hash)
-
     epd = epd.EPD()
     _LOGGER.info("Init and clear screen")
     epd.init()
@@ -126,6 +122,10 @@ def refresh_client(
 
     logging.info("Refresh done, enter sleep")
     epd.sleep()
+
+    with open(FLAG_FILE, "w") as f:
+        f.write(image_hash)
+    _LOGGER.info("New hash written to %s: %s", FLAG_FILE, image_hash)
 
     if done_pin:
         enable_done_pin(done_pin)
