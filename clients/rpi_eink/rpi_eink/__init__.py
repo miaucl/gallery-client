@@ -125,6 +125,7 @@ def refresh_client(
 
     with open(FLAG_FILE, "w") as f:
         f.write(image_hash)
+        time.sleep(0.1)
     _LOGGER.info("New hash written to %s: %s", FLAG_FILE, image_hash)
 
     if done_pin:
